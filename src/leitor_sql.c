@@ -9,7 +9,6 @@ char* ler_sql(const char* arquivo){
         printf("Erro ao abrir arquivo...");
         return NULL;
     } 
-        
 
     // Semelhante a manipulação de ResultSet em Java (mover o cursor)
     fseek(arq, 0, SEEK_END);

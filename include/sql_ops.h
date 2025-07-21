@@ -1,0 +1,29 @@
+#include "../third_party/sqlite3/sqlite3.h"
+#ifndef SQL_OPS
+#define SQL_OPS
+
+// CREATE TABLE
+int criarTabelas(sqlite3 *db);
+
+// INSERT
+int inserirPessoa(sqlite3 *db, char* nome, char* telefone);
+int inserirLivro(sqlite3 *db, int pessoa_id, char* titulo, char* autor, int ano, int edicao);
+
+// SELECT
+char* listarPessoas(sqlite3 *db);
+char* buscarPessoa(sqlite3 *db, int pessoa_id);
+char* listarEstante(sqlite3 *db, int pessoa_id);
+char* listarLivrosDeUmAutor(sqlite3 *db, int pessoa_id, char* autor);
+
+// UPDATE
+int atualizarNome(sqlite3 *db, int pessoa_id);
+int atualizarTelefone(sqlite3 *db, int pessoa_id);
+
+// DELETE
+int removerLivro(sqlite3 *db, int pessoa_id, int livro_id);
+int removerPessoa(sqlite3 *db, int pessoa_id);
+
+// EXECUTE STATEMENTS
+int executarSTMT(sqlite3 *db, sqlite3_stmt* stmt);
+
+#endif

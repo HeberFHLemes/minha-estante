@@ -1,0 +1,17 @@
+PRAGMA foreign_keys = ON;
+
+CREATE TABLE IF NOT EXISTS pessoas(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    telefone TEXT NOT NULL CHECK(length(telefone) BETWEEN 10 AND 20)
+);
+
+CREATE TABLE IF NOT EXISTS livros(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    titulo TEXT NOT NULL,
+    autor TEXT NOT NULL,
+    ano INTEGER  NOT NULL,
+    edicao INTEGER  NOT NULL,
+    dono_id INTEGER NOT NULL,
+    FOREIGN KEY (dono_id) REFERENCES pessoas(id) ON DELETE CASCADE
+);

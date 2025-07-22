@@ -16,8 +16,8 @@ void listarEstante(sqlite3 *db, int pessoa_id);
 void listarLivrosDeUmAutor(sqlite3 *db, int pessoa_id, char* autor);
 
 // UPDATE
-int atualizarNome(sqlite3 *db, int pessoa_id);
-int atualizarTelefone(sqlite3 *db, int pessoa_id);
+int atualizarNome(sqlite3 *db, int pessoa_id, char* nome);
+int atualizarTelefone(sqlite3 *db, int pessoa_id, char* telefone);
 
 // DELETE
 int removerLivro(sqlite3 *db, int pessoa_id, int livro_id);

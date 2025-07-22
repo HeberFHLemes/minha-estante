@@ -109,6 +109,7 @@ void listarPessoas(sqlite3 *db){
 }
 
 void buscarPessoa(sqlite3 *db, int pessoa_id){
+
     const char* sql = "SELECT * FROM pessoas WHERE id = ?;";
     sqlite3_stmt* stmt;  
 
@@ -120,7 +121,7 @@ void buscarPessoa(sqlite3 *db, int pessoa_id){
     }
     sqlite3_bind_int(stmt, 1, pessoa_id);
 
-    printf("+- Consulta de pessoa cadastrada -+\n", pessoa_id);
+    printf("+- Consulta de pessoa cadastrada -+\n");
     printf(" %-3s | %-20s | %-10s\n", "id", "nome", "telefone");
 
     while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
@@ -141,6 +142,43 @@ void buscarPessoa(sqlite3 *db, int pessoa_id){
 
 void listarEstante(sqlite3 *db, int pessoa_id){
 
+    const char* sql = "SELECT l.*, p.nome, p.telefone FROM livros l RIGHT JOIN pessoas p ON l.dono_id = p.id WHERE l.dono_id = ?;";
+    sqlite3_stmt* stmt; 
+
+    int rc;
+    rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Erro ao preparar a consulta: %s\n", sqlite3_errmsg(db));
+        return;
+    }
+    sqlite3_bind_int(stmt, 1, pessoa_id);
+
+    printf("\n=====  Consulta de estante =====\n");
+    printf("+-----+-----------------+------------+------+--------+---------+-----------------+-----------------+\n");
+    printf("| %-3s | %-15s | %-10s | %-4s | %-6s | %-7s | %-15s | %-15s |\n", "id", "titulo", "autor", "ano", "edicao", "dono_id", "nome", "contato");
+    printf("+-----+-----------------+------------+------+--------+---------+-----------------+-----------------+\n");
+    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+        
+        int id = sqlite3_column_int(stmt, 0);
+        const unsigned char* titulo = sqlite3_column_text(stmt, 1);
+        const unsigned char* autor = sqlite3_column_text(stmt, 2);
+        int ano = sqlite3_column_int(stmt, 3);
+        int edicao = sqlite3_column_int(stmt, 4);
+        int dono_id = sqlite3_column_int(stmt, 5);
+        const unsigned char* nome = sqlite3_column_text(stmt, 6);
+        const unsigned char* telefone = sqlite3_column_text(stmt, 7);
+
+        printf("| %-3d | %-15s | %-10s | %-4d | %-6d | %-7d | %-15s | %-10s |\n", id, titulo, autor, ano, edicao, dono_id, nome, telefone);
+    }
+
+    if (rc != SQLITE_DONE) {
+        fprintf(stderr, "Erro durante a consulta: %s\n", sqlite3_errmsg(db));
+    } else {
+        printf("+-----+-----------------+------------+------+--------+---------+-----------------+-----------------+\n");
+    }
+
+    sqlite3_finalize(stmt);
+    return; 
 }
 
 void listarLivrosDeUmAutor(sqlite3 *db, int pessoa_id, char* autor){

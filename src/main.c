@@ -9,6 +9,7 @@
 void mensagemInicial();
 int direcionarUsuario(sqlite3 *db);
 int desconectar(sqlite3 *db);
+void consultarEstante(sqlite3 *db);
 
 int main(){
 
@@ -27,14 +28,35 @@ int main(){
     } else {
         printf("Banco de dados pronto!\n");
     }
-
+    
     int escolhaMenu = direcionarUsuario(db);
     while (escolhaMenu != SAIR){
+        if (escolhaMenu == 4){
+            consultarEstante(db);
+        }
         escolhaMenu = direcionarUsuario(db);
     }
 
     printf("Desconectando...\n");
     return desconectar(db);
+}
+
+int desconectar(sqlite3 *db){
+    int rc = desconectarBD(db);
+    if (rc == SQLITE_OK){
+        printf("Desconectado com sucesso, até a próxima!\n");
+    } else {
+        printf("Erro ao desconectar do banco de dados.\n");
+    }
+    return rc;
+}
+
+void consultarEstante(sqlite3 *db){
+    int pessoa_id = 0;
+    printf("Digite o id do dono da estante a ser consultada: ");
+    scanf("%d", &pessoa_id);
+
+    listarEstante(db, pessoa_id);
 }
 
 int direcionarUsuario(sqlite3 *db){
@@ -55,16 +77,6 @@ int direcionarUsuario(sqlite3 *db){
     int op = 0;
     scanf("%d", &op);
     return op;
-}
-
-int desconectar(sqlite3 *db){
-    int rc = desconectarBD(db);
-    if (rc == SQLITE_OK){
-        printf("Desconectado com sucesso, até a próxima!\n");
-    } else {
-        printf("Erro ao desconectar do banco de dados.\n");
-    }
-    return rc;
 }
 
 void mensagemInicial(){

@@ -4,7 +4,7 @@
 #include "../include/sql_ops.h"
 
 // Cria as tabelas (se ainda não existirem) com o arquivo .sql citado
-int criarTabelas(sqlite3 *db){
+int criar_tabelas(sqlite3 *db){
 
     char* errMsg = NULL;
     char* sql = ler_sql("sql/tabelas.sql");
@@ -25,7 +25,7 @@ int criarTabelas(sqlite3 *db){
 }
 
 // Executa um statement preparado (como sqlite3_prepare_v2(db, sql, -1, &stmt, NULL)).
-int executarSTMT(sqlite3 *db, sqlite3_stmt* stmt){
+int executar_stmt(sqlite3 *db, sqlite3_stmt* stmt){
     if (sqlite3_step(stmt) != SQLITE_DONE) {
         fprintf(stderr, "Execução falhou: %s\n", sqlite3_errmsg(db));
         return SQLITE_ERROR;
@@ -35,7 +35,7 @@ int executarSTMT(sqlite3 *db, sqlite3_stmt* stmt){
 
 // INSERT
 // Insere nova pessoa na tabela de pessoas
-int inserirPessoa(sqlite3 *db, char* nome, char* telefone){
+int inserir_pessoa(sqlite3 *db, char* nome, char* telefone){
 
     const char* sql = "INSERT INTO pessoas(nome, telefone) VALUES(?, ?);";
     sqlite3_stmt* stmt;  
@@ -45,7 +45,7 @@ int inserirPessoa(sqlite3 *db, char* nome, char* telefone){
         sqlite3_bind_text(stmt, 1, nome, -1, SQLITE_TRANSIENT);
         sqlite3_bind_text(stmt, 2, telefone, -1, SQLITE_TRANSIENT);
         
-        if (executarSTMT(db, stmt) != SQLITE_OK){
+        if (executar_stmt(db, stmt) != SQLITE_OK){
             rc = SQLITE_ERROR;
         }
         sqlite3_finalize(stmt);  
@@ -57,7 +57,7 @@ int inserirPessoa(sqlite3 *db, char* nome, char* telefone){
 }
 
 // Insere novo livro na tabela livros
-int inserirLivro(sqlite3 *db, int dono_id, char* titulo, char* autor, int ano, int edicao){
+int inserir_livro(sqlite3 *db, int dono_id, char* titulo, char* autor, int ano, int edicao){
 
     const char* sql = "INSERT INTO livros(titulo, autor, ano, edicao, dono_id) VALUES(?, ?, ?, ?, ?);";
     sqlite3_stmt* stmt;  
@@ -70,7 +70,7 @@ int inserirLivro(sqlite3 *db, int dono_id, char* titulo, char* autor, int ano, i
         sqlite3_bind_int(stmt, 4, edicao);
         sqlite3_bind_int(stmt, 5, dono_id);
         
-        if (executarSTMT(db, stmt) != SQLITE_OK){
+        if (executar_stmt(db, stmt) != SQLITE_OK){
             rc = SQLITE_ERROR;
         }
         sqlite3_finalize(stmt);  
@@ -83,7 +83,7 @@ int inserirLivro(sqlite3 *db, int dono_id, char* titulo, char* autor, int ano, i
 
 // SELECT
 // Lista todas as colunas de todas as linha da tabela de pessoas
-void listarPessoas(sqlite3 *db){
+void listar_pessoas(sqlite3 *db){
 
     const char* sql = "SELECT * FROM pessoas;";
     sqlite3_stmt* stmt;  
@@ -114,7 +114,7 @@ void listarPessoas(sqlite3 *db){
 }
 
 // Tenta encontrar uma pessoa com um id específico
-void buscarPessoa(sqlite3 *db, int pessoa_id){
+void buscar_pessoa(sqlite3 *db, int pessoa_id){
 
     const char* sql = "SELECT * FROM pessoas WHERE id = ?;";
     sqlite3_stmt* stmt;  
@@ -147,7 +147,7 @@ void buscarPessoa(sqlite3 *db, int pessoa_id){
 }
 
 // Lista todos os livros de uma pessoa com id 'pessoa_id', logo, sua 'estante'
-void listarEstante(sqlite3 *db, int pessoa_id){
+void listar_estante(sqlite3 *db, int pessoa_id){
 
     const char* sql = "SELECT l.*, p.nome, p.telefone FROM livros l RIGHT JOIN pessoas p ON l.dono_id = p.id WHERE l.dono_id = ?;";
     sqlite3_stmt* stmt; 
@@ -189,7 +189,7 @@ void listarEstante(sqlite3 *db, int pessoa_id){
 }
 
 // Lista todos os livros de uma pessoa específica escritos por um autor específico
-void listarLivrosDeUmAutor(sqlite3 *db, int pessoa_id, char* autor){
+void listar_livros_de_autor(sqlite3 *db, int pessoa_id, char* autor){
     const char* sql = "SELECT * FROM livros WHERE dono_id = ? AND autor = ?";
     sqlite3_stmt* stmt; 
 
@@ -229,7 +229,7 @@ void listarLivrosDeUmAutor(sqlite3 *db, int pessoa_id, char* autor){
 }
 
 // UPDATE
-int atualizarNome(sqlite3 *db, int pessoa_id, char* nome){
+int atualizar_nome(sqlite3 *db, int pessoa_id, char* nome){
     const char* sql = "UPDATE pessoas SET nome = ? WHERE id = ?";
     sqlite3_stmt* stmt; 
 
@@ -239,7 +239,7 @@ int atualizarNome(sqlite3 *db, int pessoa_id, char* nome){
         sqlite3_bind_int(stmt, 1, pessoa_id);
         sqlite3_bind_text(stmt, 2, nome, -1, SQLITE_TRANSIENT);
         
-        if (executarSTMT(db, stmt) != SQLITE_OK){
+        if (executar_stmt(db, stmt) != SQLITE_OK){
             rc = SQLITE_ERROR;
         }
         sqlite3_finalize(stmt);  
@@ -250,7 +250,7 @@ int atualizarNome(sqlite3 *db, int pessoa_id, char* nome){
     return rc;
 }
 
-int atualizarTelefone(sqlite3 *db, int pessoa_id, char* telefone){
+int atualizar_telefone(sqlite3 *db, int pessoa_id, char* telefone){
     const char* sql = "UPDATE pessoas SET telefone = ? WHERE id = ?";
     sqlite3_stmt* stmt; 
 
@@ -260,7 +260,7 @@ int atualizarTelefone(sqlite3 *db, int pessoa_id, char* telefone){
         sqlite3_bind_int(stmt, 1, pessoa_id);
         sqlite3_bind_text(stmt, 2, telefone, -1, SQLITE_TRANSIENT);
         
-        if (executarSTMT(db, stmt) != SQLITE_OK){
+        if (executar_stmt(db, stmt) != SQLITE_OK){
             rc = SQLITE_ERROR;
         }
         sqlite3_finalize(stmt);  
@@ -272,9 +272,9 @@ int atualizarTelefone(sqlite3 *db, int pessoa_id, char* telefone){
 }
 
 // DELETE
-int removerLivro(sqlite3 *db, int pessoa_id, int livro_id){
+int remover_livro(sqlite3 *db, int pessoa_id, int livro_id){
 
 }
-int removerPessoa(sqlite3 *db, int pessoa_id){
+int remover_pessoa(sqlite3 *db, int pessoa_id){
 
 }

@@ -2,7 +2,7 @@
 #ifndef DB_CONFIG
 #define DB_CONFIG
 
-int conectarBD(sqlite3 **db, const char *nomeBD);
-int desconectarBD(sqlite3 *db);
+int conectar_db(sqlite3 **db, const char *nomeBD);
+int desconectar_db(sqlite3 *db);
 
 #endif

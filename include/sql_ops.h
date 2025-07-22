@@ -3,27 +3,27 @@
 #define SQL_OPS
 
 // CREATE TABLE
-int criarTabelas(sqlite3 *db);
+int criar_tabelas(sqlite3 *db);
 
 // INSERT
-int inserirPessoa(sqlite3 *db, char* nome, char* telefone);
-int inserirLivro(sqlite3 *db, int pessoa_id, char* titulo, char* autor, int ano, int edicao);
+int inserir_pessoa(sqlite3 *db, char* nome, char* telefone);
+int inserir_livro(sqlite3 *db, int pessoa_id, char* titulo, char* autor, int ano, int edicao);
 
 // SELECT
-void listarPessoas(sqlite3 *db);
-void buscarPessoa(sqlite3 *db, int pessoa_id);
-void listarEstante(sqlite3 *db, int pessoa_id);
-void listarLivrosDeUmAutor(sqlite3 *db, int pessoa_id, char* autor);
+void listar_pessoas(sqlite3 *db);
+void buscar_pessoa(sqlite3 *db, int pessoa_id);
+void listar_estante(sqlite3 *db, int pessoa_id);
+void listar_livros_de_autor(sqlite3 *db, int pessoa_id, char* autor);
 
 // UPDATE
-int atualizarNome(sqlite3 *db, int pessoa_id, char* nome);
-int atualizarTelefone(sqlite3 *db, int pessoa_id, char* telefone);
+int atualizar_nome(sqlite3 *db, int pessoa_id, char* nome);
+int atualizar_telefone(sqlite3 *db, int pessoa_id, char* telefone);
 
 // DELETE
-int removerLivro(sqlite3 *db, int pessoa_id, int livro_id);
-int removerPessoa(sqlite3 *db, int pessoa_id);
+int remover_livro(sqlite3 *db, int pessoa_id, int livro_id);
+int remover_pessoa(sqlite3 *db, int pessoa_id);
 
 // EXECUTE STATEMENTS
-int executarSTMT(sqlite3 *db, sqlite3_stmt* stmt);
+int executar_stmt(sqlite3 *db, sqlite3_stmt* stmt);
 
 #endif

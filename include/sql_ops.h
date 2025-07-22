@@ -10,7 +10,7 @@ int inserirPessoa(sqlite3 *db, char* nome, char* telefone);
 int inserirLivro(sqlite3 *db, int pessoa_id, char* titulo, char* autor, int ano, int edicao);
 
 // SELECT
-char* listarPessoas(sqlite3 *db);
+void listarPessoas(sqlite3 *db);
 char* buscarPessoa(sqlite3 *db, int pessoa_id);
 char* listarEstante(sqlite3 *db, int pessoa_id);
 char* listarLivrosDeUmAutor(sqlite3 *db, int pessoa_id, char* autor);

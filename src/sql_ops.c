@@ -4,6 +4,7 @@
 #include "../include/sql_ops.h"
 
 int criarTabelas(sqlite3 *db){
+
     char* errMsg = NULL;
     char* sql = ler_sql("sql/tabelas.sql");
     if (!sql) {
@@ -32,6 +33,7 @@ int executarSTMT(sqlite3 *db, sqlite3_stmt* stmt){
 
 // INSERT
 int inserirPessoa(sqlite3 *db, char* nome, char* telefone){
+
     const char* sql = "INSERT INTO pessoas(nome, telefone) VALUES(?, ?);";
     sqlite3_stmt* stmt;  
     int rc = SQLITE_OK;
@@ -52,6 +54,7 @@ int inserirPessoa(sqlite3 *db, char* nome, char* telefone){
 }
 
 int inserirLivro(sqlite3 *db, int dono_id, char* titulo, char* autor, int ano, int edicao){
+
     const char* sql = "INSERT INTO livros(titulo, autor, ano, edicao, dono_id) VALUES(?, ?, ?, ?, ?);";
     sqlite3_stmt* stmt;  
     int rc = SQLITE_OK;
@@ -75,15 +78,45 @@ int inserirLivro(sqlite3 *db, int dono_id, char* titulo, char* autor, int ano, i
 }
 
 // SELECT
-char* listarPessoas(sqlite3 *db){
+void listarPessoas(sqlite3 *db){
 
+    const char* sql = "SELECT * FROM pessoas;";
+    sqlite3_stmt* stmt;  
+
+    int rc;
+    rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Erro ao preparar a consulta: %s\n", sqlite3_errmsg(db));
+        return;
+    }
+    
+    printf("+- Pessoas cadastradas -+\n");
+    // printf(" id | nome | telefone\n");
+    printf(" %-3s | %-20s | %-10s\n", "id", "nome", "telefone");
+    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+        int id = sqlite3_column_int(stmt, 0);
+        const unsigned char* nome = sqlite3_column_text(stmt, 1);
+        const unsigned char* telefone = sqlite3_column_text(stmt, 2);
+
+        printf(" %-3d | %-20s | %-10s\n", id, nome, telefone);
+    }
+
+     if (rc != SQLITE_DONE) {
+        fprintf(stderr, "Erro durante a consulta: %s\n", sqlite3_errmsg(db));
+    }
+
+    sqlite3_finalize(stmt);
+    return; 
 }
+
 char* buscarPessoa(sqlite3 *db, int pessoa_id){
 
 }
+
 char* listarEstante(sqlite3 *db, int pessoa_id){
 
 }
+
 char* listarLivrosDeUmAutor(sqlite3 *db, int pessoa_id, char* autor){
 
 }

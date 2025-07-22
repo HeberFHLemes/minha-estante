@@ -11,9 +11,9 @@ int inserirLivro(sqlite3 *db, int pessoa_id, char* titulo, char* autor, int ano,
 
 // SELECT
 void listarPessoas(sqlite3 *db);
-char* buscarPessoa(sqlite3 *db, int pessoa_id);
-char* listarEstante(sqlite3 *db, int pessoa_id);
-char* listarLivrosDeUmAutor(sqlite3 *db, int pessoa_id, char* autor);
+void buscarPessoa(sqlite3 *db, int pessoa_id);
+void listarEstante(sqlite3 *db, int pessoa_id);
+void listarLivrosDeUmAutor(sqlite3 *db, int pessoa_id, char* autor);
 
 // UPDATE
 int atualizarNome(sqlite3 *db, int pessoa_id);

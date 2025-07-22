@@ -91,7 +91,6 @@ void listarPessoas(sqlite3 *db){
     }
     
     printf("+- Pessoas cadastradas -+\n");
-    // printf(" id | nome | telefone\n");
     printf(" %-3s | %-20s | %-10s\n", "id", "nome", "telefone");
     while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
         int id = sqlite3_column_int(stmt, 0);
@@ -101,7 +100,7 @@ void listarPessoas(sqlite3 *db){
         printf(" %-3d | %-20s | %-10s\n", id, nome, telefone);
     }
 
-     if (rc != SQLITE_DONE) {
+    if (rc != SQLITE_DONE) {
         fprintf(stderr, "Erro durante a consulta: %s\n", sqlite3_errmsg(db));
     }
 
@@ -109,15 +108,42 @@ void listarPessoas(sqlite3 *db){
     return; 
 }
 
-char* buscarPessoa(sqlite3 *db, int pessoa_id){
+void buscarPessoa(sqlite3 *db, int pessoa_id){
+    const char* sql = "SELECT * FROM pessoas WHERE id = ?;";
+    sqlite3_stmt* stmt;  
+
+    int rc;
+    rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Erro ao preparar a consulta: %s\n", sqlite3_errmsg(db));
+        return;
+    }
+    sqlite3_bind_int(stmt, 1, pessoa_id);
+
+    printf("+- Consulta de pessoa cadastrada -+\n", pessoa_id);
+    printf(" %-3s | %-20s | %-10s\n", "id", "nome", "telefone");
+
+    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+        int id = sqlite3_column_int(stmt, 0);
+        const unsigned char* nome = sqlite3_column_text(stmt, 1);
+        const unsigned char* telefone = sqlite3_column_text(stmt, 2);
+
+        printf(" %-3d | %-20s | %-10s\n", id, nome, telefone);
+    }
+
+    if (rc != SQLITE_DONE) {
+        fprintf(stderr, "Erro durante a consulta: %s\n", sqlite3_errmsg(db));
+    }
+
+    sqlite3_finalize(stmt);
+    return; 
+}
+
+void listarEstante(sqlite3 *db, int pessoa_id){
 
 }
 
-char* listarEstante(sqlite3 *db, int pessoa_id){
-
-}
-
-char* listarLivrosDeUmAutor(sqlite3 *db, int pessoa_id, char* autor){
+void listarLivrosDeUmAutor(sqlite3 *db, int pessoa_id, char* autor){
 
 }
 

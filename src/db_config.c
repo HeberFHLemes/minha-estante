@@ -9,10 +9,10 @@ int conectar_db(sqlite3 **db, const char *nome_db){
     
     if (rc != SQLITE_OK) {
         if (db && *db) {
-            fprintf(stderr, "Erro ao abrir banco de dados %s: %s\n", nome_db, sqlite3_errmsg(*db));
+            fprintf(stderr, "Erro conectar com o banco de dados %s: %s\n", nome_db, sqlite3_errmsg(*db));
             desconectar_db(*db);
         } else {
-            fprintf(stderr, "Erro ao abrir banco de dados %s: mensagem indisponível\n", nome_db);
+            fprintf(stderr, "Erro ao conectar com o banco de dados %s: mensagem indisponível\n", nome_db);
         }
     }
     return rc;

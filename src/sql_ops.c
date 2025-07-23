@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include "../third_party/sqlite3/sqlite3.h"
-#include "leitor_sql.c"
 #include "../include/sql_ops.h"
+#include "../include/estruturas.h"
+#include "leitor_sql.c"
 
 // Cria as tabelas (se ainda não existirem) com o arquivo .sql citado
 int criar_tabelas(sqlite3 *db){
@@ -35,6 +36,50 @@ int executar_stmt(sqlite3 *db, sqlite3_stmt* stmt){
 
 // INSERT
 // Insere nova pessoa na tabela de pessoas
+int inserir_pessoa(sqlite3 *db, Pessoa* pessoa){
+    const char* sql = "INSERT INTO pessoas(nome, telefone) VALUES(?, ?);";
+    sqlite3_stmt* stmt;  
+    int rc = SQLITE_OK;
+
+    if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) == SQLITE_OK) {
+        sqlite3_bind_text(stmt, 1, pessoa->nome, -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stmt, 2, pessoa->telefone, -1, SQLITE_TRANSIENT);
+        
+        if (executar_stmt(db, stmt) != SQLITE_OK){
+            rc = SQLITE_ERROR;
+        }
+        sqlite3_finalize(stmt);  
+    } else {
+        fprintf(stderr, "Statement SQL falhou: %s\n", sqlite3_errmsg(db));
+        rc = SQLITE_ERROR;
+    }
+    return rc;
+}
+int inserir_livro(sqlite3 *db, Livro* livro){
+    const char* sql = "INSERT INTO livros(titulo, autor, ano, edicao, dono_id) VALUES(?, ?, ?, ?, ?);";
+    sqlite3_stmt* stmt;  
+    int rc = SQLITE_OK;
+
+    if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) == SQLITE_OK) {
+        sqlite3_bind_text(stmt, 1, livro->titulo, -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stmt, 2, livro->autor, -1, SQLITE_TRANSIENT);
+        sqlite3_bind_int(stmt, 3, livro->ano);
+        sqlite3_bind_int(stmt, 4, livro->edicao);
+        sqlite3_bind_int(stmt, 5, livro->dono_id);
+        
+        if (executar_stmt(db, stmt) != SQLITE_OK){
+            rc = SQLITE_ERROR;
+        }
+        sqlite3_finalize(stmt);  
+    } else {
+        fprintf(stderr, "Statement SQL falhou: %s\n", sqlite3_errmsg(db));
+        rc = SQLITE_ERROR;
+    }
+    return rc;
+}
+
+
+/*// Insere nova pessoa na tabela de pessoas
 int inserir_pessoa(sqlite3 *db, char* nome, char* telefone){
 
     const char* sql = "INSERT INTO pessoas(nome, telefone) VALUES(?, ?);";
@@ -79,7 +124,7 @@ int inserir_livro(sqlite3 *db, int dono_id, char* titulo, char* autor, int ano, 
         rc = SQLITE_ERROR;
     }
     return rc;
-}
+}*/
 
 // SELECT
 // Lista todas as colunas de todas as linha da tabela de pessoas

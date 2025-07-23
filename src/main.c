@@ -4,15 +4,11 @@
 #include "../include/estruturas.h"
 #include "db_config.c"
 #include "sql_ops.c"
+#include "user_interface.c"
 
 #define SAIR 0
+#define DB_PATH "minhaestante.db"
 
-// TODO: 
-// mover funções de operações e fluxo de escolhas para arquivos próprios
-
-// Interface / Fluxo de escolhas do usuário
-void mensagem_inicial();
-int menu_opcoes(sqlite3 *db);
 void direcionar_usuario(sqlite3 *db, int escolha);
 
 // Operações com BD
@@ -25,22 +21,16 @@ void atualizar_nome_pessoa(sqlite3 *db);
 void atualizar_telefone_pessoa(sqlite3 *db);
 void remover_registro_pessoa(sqlite3 *db);
 
-// Inputs
-void get_string(char* buffer, size_t tamanho_max, const char* frase);
-int get_escolha_int(const char* frase);
-void limpar_stdin();
-
 // Conexão
 int desconectar(sqlite3 *db);
 
 int main(){
 
     mensagem_inicial();
-
-    printf("Iniciando conexão ao banco de dados...\n");
+    efeito_carregando("Iniciando conexão ao banco de dados");
 
     sqlite3 *db = NULL;
-    if (conectar_db(&db, "minhaestante.db") != SQLITE_OK){
+    if (conectar_db(&db, DB_PATH) != SQLITE_OK){
         return 1;
     }
 
@@ -48,7 +38,7 @@ int main(){
         printf("Ocorreu um erro ao criar as tabelas para o banco de dados...\n");
         return desconectar(db);
     } else {
-        printf("Banco de dados pronto!\n");
+        printf("Banco de dados pronto e conexão efetuada!\nSeja bem-vindo!\n");
     }
     
     int escolha = menu_opcoes(db);
@@ -57,7 +47,7 @@ int main(){
         escolha = menu_opcoes(db);
     }
 
-    printf("Desconectando...\n");
+    efeito_carregando("Desconectando");
     return desconectar(db);
 }
 
@@ -80,7 +70,17 @@ void cadastrar_pessoa(sqlite3 *db){
     char telefone[MAX_NOME];
     get_string(telefone, MAX_NOME, "Digite o telefone para contato: ");
 
-    inserir_pessoa(db, nome, telefone);
+    // Uso do struct Pessoa (estruturas.h)
+    Pessoa pessoa;
+    strncpy(pessoa.nome, nome, MAX_NOME);
+    pessoa.nome[MAX_NOME - 1] = '\0';
+
+    strncpy(pessoa.telefone, telefone, MAX_NOME);
+    pessoa.telefone[MAX_NOME - 1] = '\0';
+
+    inserir_pessoa(db, &pessoa);
+
+    // inserir_pessoa(db, nome, telefone);
 }
 
 void cadastrar_livro(sqlite3 *db){
@@ -98,7 +98,21 @@ void cadastrar_livro(sqlite3 *db){
 
     int dono_id = get_escolha_int("Digite o id do dono do livro: ");
 
-    inserir_livro(db, dono_id, titulo, autor, ano, edicao);
+    // Uso do struct Livro (estruturas.h)
+    Livro livro = { 
+        .ano = ano,
+        .edicao = edicao,
+        .dono_id = dono_id
+    };
+    strncpy(livro.titulo, titulo, MAX_NOME);
+    livro.titulo[MAX_NOME - 1] = '\0';
+
+    strncpy(livro.autor, autor, MAX_NOME);
+    livro.autor[MAX_NOME - 1] = '\0';
+    
+    inserir_livro(db, &livro);
+
+    // inserir_livro(db, dono_id, titulo, autor, ano, edicao);
 }
 
 /* Atualmente chamando listar_pessoas(sqlite3 *db) direto
@@ -132,6 +146,7 @@ void atualizar_pessoa(sqlite3 *db){
             break;
         case 2:
             atualizar_telefone_pessoa(db);
+            break;
         default:
             printf("Opção inválida, tente novamente.\n");
             return atualizar_pessoa(db);
@@ -174,7 +189,6 @@ void remover_registro_pessoa(sqlite3 *db){
     return;
 }
 
-
 void direcionar_usuario(sqlite3 *db, int escolha){
     switch (escolha){
         case 1:
@@ -193,83 +207,16 @@ void direcionar_usuario(sqlite3 *db, int escolha){
             consultar_estante(db);
             break;
         case 6:
-            atualizar_info_pessoa(db);
+            atualizar_pessoa(db);
             break;
         case 7:
             remover_registro_pessoa(db);
+            break;
         case 8:
+            return;
+        case 9:
             return;
         default:
             return;
     }
-}
-
-void get_string(char* buffer, size_t tamanho_max, const char* frase){
-    
-    printf("%s", frase);
-    fgets(buffer, tamanho_max, stdin);
-
-    size_t len = strlen(buffer);
-    if (len > 0 && buffer[len - 1] == '\n') {
-        buffer[len - 1] = '\0';
-    }
-}
-
-// Apresenta uma frase ao usuário e retorna um int digitado pelo mesmo
-int get_escolha_int(const char* frase){
-    int escolha = 0;
-    int resultado;
-
-    printf("%s", frase);
-    resultado = scanf("%d", &escolha);
-    limpar_stdin();
-
-    // validação do input
-    if (resultado != 1) {
-        printf("Entrada inválida. Tente novamente.\n");
-        return get_escolha_int(frase);
-    }
-
-    return escolha;
-}
-
-// Limpa o stdin após scanf ou fgets
-void limpar_stdin(){
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF); 
-}
-
-int menu_opcoes(sqlite3 *db){
-
-    printf("+--------------------------+\n");
-    printf("|      Menu de opções      |\n");
-    printf("+--------------------------+\n");
-    printf("| [1] - Cadastrar pessoa   |\n");
-    printf("| [2] - Cadastrar livro    |\n");
-    printf("| [3] - Listar pessoas     |\n");
-    printf("| [4] - Consultar pessoa   |\n");
-    printf("| [5] - Consultar estante  |\n");
-    printf("| [6] - Atualizar pessoa   |\n");
-    printf("| [7] - Remover pessoa     |\n");
-    printf("| [8] - Atualizar livro    |\n");
-    printf("| [9] - Remover livro      |\n");
-    printf("| [0] - Sair               |\n");
-    printf("+--------------------------+\n");
-    return get_escolha_int("Digite sua escolha (0-9): ");
-}
-
-void mensagem_inicial(){
-
-    printf("+==========================================================================================================================+\n");
-    printf("||                                                                                                                        ||\n");
-    printf("||    |\\        /| | |\\    | |     |     /\\         ______   _____  _________     /\\     |\\    |  _________   ______      ||\n");
-    printf("||    | \\      / | | | \\   | |     |    /  \\       |        |           |        /  \\    | \\   |      |      |            ||\n");
-    printf("||    |  \\    /  | | |  \\  | |=====|   /----\\      |______  |_____      |       /----\\   |  \\  |      |      |______      ||\n");
-    printf("||    |   \\  /   | | |   \\ | |     |  /      \\     |              |     |      /      \\  |   \\ |      |      |            ||\n");
-    printf("||    |    \\/    | | |    \\| |     | /        \\    |______  ______|     |     /        \\ |    \\|      |      |______      ||\n");
-    printf("||________________________________________________________________________________________________________________________||\n");
-    printf("\\_________________________________________________________________________________________________________________________/\n");
-    printf("%120s\n", "Author: @HeberFHLemes");
-
-    printf("Iniciando programa...\n");
 }

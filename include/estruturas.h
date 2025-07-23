@@ -13,7 +13,7 @@ typedef struct {
     char autor[MAX_NOME];
     int ano;
     int edicao;
-    Pessoa dono;
+    int dono_id;
 } Livro;
 
 #endif

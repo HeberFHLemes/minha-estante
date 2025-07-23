@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../include/sql_ops.h"
-#include "../include/leitor_sql.h"
+#include "sql_ops.h"
+#include "leitor_sql.h"
 
 // Cria as tabelas (se ainda não existirem) com o arquivo .sql citado
 int criar_tabelas(sqlite3 *db){

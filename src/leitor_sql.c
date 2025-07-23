@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../include/leitor_sql.h"
+#include "leitor_sql.h"
 
 // Para ler o arquivo .sql e retornar o conteúdo a ser executado
 char* ler_sql(const char* arquivo){

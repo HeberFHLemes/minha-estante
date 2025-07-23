@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
-#include "../include/db_config.h"
-#include "../include/sql_ops.h"
-#include "../include/user_interface.h"
+#include "db_config.h"
+#include "sql_ops.h"
+#include "user_interface.h"
 // gcc src/main.c src/leitor_sql.c src/console_utils.c src/db_config.c src/sql_ops.c src/user_interface.c -lsqlite3 -o MinhaEstante
 #define SAIR 0
 

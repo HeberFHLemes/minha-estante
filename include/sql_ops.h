@@ -1,7 +1,7 @@
 #ifndef SQL_OPS_H
 #define SQL_OPS_H
 
-#include "../third_party/sqlite3/sqlite3.h"
+#include "sqlite3.h"
 #include "estruturas.h"
 
 // CREATE TABLE

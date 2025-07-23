@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "../include/db_config.h"
+#include "db_config.h"
 
 const char* DB_PATH = "minhaestante.db";
 

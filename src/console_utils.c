@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "../include/console_utils.h"
+#include "console_utils.h"
 
 #ifdef _WIN32
 #include <windows.h>

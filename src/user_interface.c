@@ -1,7 +1,7 @@
 #include <stdio.h>
-#include "../third_party/sqlite3/sqlite3.h"
+#include <string.h>
 #include "../include/user_interface.h"
-#include "console_utils.c"
+#include "../include/console_utils.h"
 
 void mensagem_inicial(){
 
@@ -17,7 +17,7 @@ void mensagem_inicial(){
     printf("%120s\n", "Author: @HeberFHLemes");
 
     // printf("Iniciando programa...\n");
-    efeito_carregando("Iniciando programa");
+    efeito_carregando_curto("Iniciando programa");
 }
 
 int menu_opcoes(sqlite3 *db){
@@ -43,6 +43,17 @@ void efeito_carregando(char* base){
     const char *dots[] = {".  ", ".. ", "..."};
 
     for (int i = 0; i < 6; i++) {
+        printf("\r%s%s", base, dots[i % 3]);
+        fflush(stdout);
+        sleep_padrao();
+    }
+    printf("\n");
+}
+
+void efeito_carregando_curto(char* base){
+    const char *dots[] = {".  ", ".. ", "..."};
+
+    for (int i = 0; i < 3; i++) {
         printf("\r%s%s", base, dots[i % 3]);
         fflush(stdout);
         sleep_padrao();

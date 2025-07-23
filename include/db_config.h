@@ -1,8 +1,10 @@
-#include "../third_party/sqlite3/sqlite3.h"
 #ifndef DB_CONFIG_H
 #define DB_CONFIG_H
 
-int conectar_db(sqlite3 **db, const char *nomeBD);
+#include "../third_party/sqlite3/sqlite3.h"
+
+extern const char* DB_PATH;
+int conectar_db(sqlite3 **db);
 int desconectar_db(sqlite3 *db);
 
 #endif

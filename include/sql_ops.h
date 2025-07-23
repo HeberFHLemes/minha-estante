@@ -1,15 +1,13 @@
-#include "../third_party/sqlite3/sqlite3.h"
-#include "estruturas.h"
 #ifndef SQL_OPS_H
 #define SQL_OPS_H
+
+#include "../third_party/sqlite3/sqlite3.h"
+#include "estruturas.h"
 
 // CREATE TABLE
 int criar_tabelas(sqlite3 *db);
 
 // INSERT
-// int inserir_pessoa(sqlite3 *db, char* nome, char* telefone);
-// int inserir_livro(sqlite3 *db, int pessoa_id, char* titulo, char* autor, int ano, int edicao);
-
 int inserir_pessoa(sqlite3 *db, Pessoa* pessoa);
 int inserir_livro(sqlite3 *db, Livro* livro);
 

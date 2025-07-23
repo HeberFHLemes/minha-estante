@@ -1,13 +1,10 @@
 #include <stdio.h>
 #include <string.h>
-#include "../third_party/sqlite3/sqlite3.h"
-#include "../include/estruturas.h"
-#include "db_config.c"
-#include "sql_ops.c"
-#include "user_interface.c"
-
+#include "../include/db_config.h"
+#include "../include/sql_ops.h"
+#include "../include/user_interface.h"
+// gcc src/main.c src/leitor_sql.c src/console_utils.c src/db_config.c src/sql_ops.c src/user_interface.c -lsqlite3 -o MinhaEstante
 #define SAIR 0
-#define DB_PATH "minhaestante.db"
 
 void direcionar_usuario(sqlite3 *db, int escolha);
 
@@ -27,12 +24,10 @@ int desconectar(sqlite3 *db);
 int main(){
 
     mensagem_inicial();
-    efeito_carregando("Iniciando conexão ao banco de dados");
+    efeito_carregando("Iniciando conexão com o banco de dados");
 
     sqlite3 *db = NULL;
-    if (conectar_db(&db, DB_PATH) != SQLITE_OK){
-        return 1;
-    }
+    if (conectar_db(&db) != SQLITE_OK) return 1;
 
     if (criar_tabelas(db) != 0){
         printf("Ocorreu um erro ao criar as tabelas para o banco de dados...\n");

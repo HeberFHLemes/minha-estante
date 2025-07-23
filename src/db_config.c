@@ -1,18 +1,19 @@
 #include <stdio.h>
 #include "../include/db_config.h"
-#include "../third_party/sqlite3/sqlite3.h"
+
+const char* DB_PATH = "minhaestante.db";
 
 // tenta abrir/criar banco de dados
-int conectar_db(sqlite3 **db, const char *nome_db){    
+int conectar_db(sqlite3 **db){    
 
-    int rc = sqlite3_open(nome_db, db);
+    int rc = sqlite3_open(DB_PATH, db);
     
     if (rc != SQLITE_OK) {
         if (db && *db) {
-            fprintf(stderr, "Erro conectar com o banco de dados %s: %s\n", nome_db, sqlite3_errmsg(*db));
+            fprintf(stderr, "Erro conectar com o banco de dados %s: %s\n", DB_PATH, sqlite3_errmsg(*db));
             desconectar_db(*db);
         } else {
-            fprintf(stderr, "Erro ao conectar com o banco de dados %s: mensagem indisponível\n", nome_db);
+            fprintf(stderr, "Erro ao conectar com o banco de dados %s: mensagem indisponível\n", DB_PATH);
         }
     }
     return rc;

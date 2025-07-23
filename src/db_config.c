@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "db_config.h"
 
-const char* DB_PATH = "minhaestante.db";
+const char* DB_PATH = "../minhaestante.db";
 
 // tenta abrir/criar banco de dados
 int conectar_db(sqlite3 **db){    
@@ -12,6 +12,7 @@ int conectar_db(sqlite3 **db){
         if (db && *db) {
             fprintf(stderr, "Erro conectar com o banco de dados %s: %s\n", DB_PATH, sqlite3_errmsg(*db));
             desconectar_db(*db);
+            *db = NULL;  // definir como nulo caso falhe
         } else {
             fprintf(stderr, "Erro ao conectar com o banco de dados %s: mensagem indisponível\n", DB_PATH);
         }

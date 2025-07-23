@@ -3,7 +3,7 @@
 #include "db_config.h"
 #include "sql_ops.h"
 #include "user_interface.h"
-// gcc src/main.c src/leitor_sql.c src/console_utils.c src/db_config.c src/sql_ops.c src/user_interface.c -lsqlite3 -o MinhaEstante
+
 #define SAIR 0
 
 void direcionar_usuario(sqlite3 *db, int escolha);

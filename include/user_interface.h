@@ -1,7 +1,7 @@
 #ifndef USER_INTERFACE_H
 #define USER_INTERFACE_H
 
-#include "../third_party/sqlite3/sqlite3.h"
+#include "sqlite3.h"
 
 // Interface / Fluxo de escolhas do usuário
 void mensagem_inicial();

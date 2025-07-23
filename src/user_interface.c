@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
-#include "../include/user_interface.h"
-#include "../include/console_utils.h"
+#include "user_interface.h"
+#include "console_utils.h"
 
 void mensagem_inicial(){
 

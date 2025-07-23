@@ -20,9 +20,10 @@ void listar_livros_de_autor(sqlite3 *db, int pessoa_id, char* autor);
 // UPDATE
 int atualizar_nome(sqlite3 *db, int pessoa_id, char* nome);
 int atualizar_telefone(sqlite3 *db, int pessoa_id, char* telefone);
+int atualizar_titulo(sqlite3 *db, int livro_id, char* titulo);
 
 // DELETE
-int remover_livro(sqlite3 *db, int pessoa_id, int livro_id);
+int remover_livro(sqlite3 *db, int livro_id);
 int remover_pessoa(sqlite3 *db, int pessoa_id);
 
 // EXECUTE STATEMENTS

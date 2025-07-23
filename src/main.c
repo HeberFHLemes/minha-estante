@@ -17,6 +17,8 @@ void atualizar_pessoa(sqlite3 *db);
 void atualizar_nome_pessoa(sqlite3 *db);
 void atualizar_telefone_pessoa(sqlite3 *db);
 void remover_registro_pessoa(sqlite3 *db);
+void atualizar_livro(sqlite3 *db);
+void remover_registro_livro(sqlite3 *db);
 
 // Conexão
 int desconectar(sqlite3 *db);
@@ -74,8 +76,6 @@ void cadastrar_pessoa(sqlite3 *db){
     pessoa.telefone[MAX_NOME - 1] = '\0';
 
     inserir_pessoa(db, &pessoa);
-
-    // inserir_pessoa(db, nome, telefone);
 }
 
 void cadastrar_livro(sqlite3 *db){
@@ -106,8 +106,6 @@ void cadastrar_livro(sqlite3 *db){
     livro.autor[MAX_NOME - 1] = '\0';
     
     inserir_livro(db, &livro);
-
-    // inserir_livro(db, dono_id, titulo, autor, ano, edicao);
 }
 
 /* Atualmente chamando listar_pessoas(sqlite3 *db) direto
@@ -116,6 +114,7 @@ void listar_tabela_pessoas(sqlite3 *db){
 }*/
 
 void consultar_pessoa(sqlite3 *db){
+    printf(" === Consultar pessoa ===\n");
     int pessoa_id = get_escolha_int("Digite o id da pessoa a ser consultada: ");
     buscar_pessoa(db, pessoa_id);
 }
@@ -170,7 +169,7 @@ void atualizar_telefone_pessoa(sqlite3 *db){
 
     int id = get_escolha_int("Digite o id da pessoa (ou 0 para cancelar): ");
     if (id == 0){
-        printf("Cancelando operação...\n");
+        printf("Operação cancelada.\n");
         return;
     }
 
@@ -181,7 +180,38 @@ void atualizar_telefone_pessoa(sqlite3 *db){
 }
 
 void remover_registro_pessoa(sqlite3 *db){
-    return;
+    
+    printf(" === Remover pessoa ===\n");  
+    int id = get_escolha_int("Digite o id da pessoa (ou 0 para cancelar): ");
+    if (id == 0){
+        printf("Operação cancelada.\n");
+        return;
+    }
+    remover_pessoa(db, id);
+}
+
+void atualizar_livro(sqlite3 *db){
+    printf(" === Atualizar título de um livro ===\n");
+    int id = get_escolha_int("Digite o id do livro (ou 0 para cancelar): ");
+    if (id == 0){
+        printf("Operação cancelada.\n");
+        return;
+    }    
+    char titulo[MAX_NOME];
+    get_string(titulo, MAX_NOME, "Digite o titulo do livro: ");
+
+    atualizar_titulo(db, id, titulo);
+}
+
+void remover_registro_livro(sqlite3 *db){
+    
+    printf(" === Remover livro ===\n");
+    int id = get_escolha_int("Digite o id do livro (ou 0 para cancelar): ");
+    if (id == 0){
+        printf("Operação cancelada.\n");
+        return;
+    }
+    remover_livro(db, id);
 }
 
 void direcionar_usuario(sqlite3 *db, int escolha){
@@ -208,9 +238,11 @@ void direcionar_usuario(sqlite3 *db, int escolha){
             remover_registro_pessoa(db);
             break;
         case 8:
-            return;
+            atualizar_livro(db);
+            break;
         case 9:
-            return;
+            remover_registro_livro(db);
+            break;
         default:
             return;
     }

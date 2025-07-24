@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "db_config.h"
 
-const char* DB_PATH = "../minhaestante.db";
+// const char* DB_PATH = "minhaestante.db";
 
 // tenta abrir/criar banco de dados
 int conectar_db(sqlite3 **db){    

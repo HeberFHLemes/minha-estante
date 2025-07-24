@@ -54,6 +54,16 @@ dkms.conf
 # debug information files
 *.dwo
 
+# IDE/Editor
 .vscode
-third_party/
+
+# Banco de dados
 *.db
+
+# Biblioteca SQLite3 utilizada
+third_party/sqlite3/*
+
+# Arquivos do SQLite3 .c e .h para compilação
+!third_party/sqlite3/sqlite3.c
+!third_party/sqlite3/sqlite3.h
+!third_party/sqlite3/sqlite3ext.h

@@ -3,6 +3,7 @@
 #include "db_config.h"
 #include "sql_ops.h"
 #include "user_interface.h"
+#include "console_utils.h"
 
 #define SAIR 0
 
@@ -26,8 +27,9 @@ int desconectar(sqlite3 *db);
 int main(){
 
     mensagem_inicial();
+    
     efeito_carregando("Iniciando conexão com o banco de dados");
-
+    
     sqlite3 *db = NULL;
     if (conectar_db(&db) != SQLITE_OK) return 1;
 
@@ -35,8 +37,9 @@ int main(){
         printf("Ocorreu um erro ao criar as tabelas para o banco de dados...\n");
         return desconectar(db);
     } else {
-        printf("Banco de dados pronto e conexão efetuada!\nSeja bem-vindo!\n");
+        printf(ANSI_GREEN "Banco de dados pronto e conexão efetuada!\n" ANSI_RESET);
     }
+    printf("Seja bem-vindo!\n");
     
     int escolha = menu_opcoes(db);
     while (escolha != SAIR){

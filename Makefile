@@ -82,7 +82,7 @@ dirs:
 run: $(EXE_NAME)
 	./$(EXE_NAME)
 
-# Remove os arquivos executáveis em bin/, os arquivos .o em build/ e os bancos de dados em db/
+# Remove os arquivos executáveis em bin/ e os arquivos .o em build/
 # rm -r $(BIN_DIR)/* $(OBJ_DIR)/* 
 clean:
 	rm $(BIN_DIR)/*.exe $(OBJ_DIR)/*.o

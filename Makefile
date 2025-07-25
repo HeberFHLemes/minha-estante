@@ -19,6 +19,7 @@ SRC_DIR = src
 SRC_FILES = $(wildcard $(SRC_DIR)/*.c)
 OBJ_DIR = build
 BIN_DIR = bin
+DB_DIR = data
 EXE_NAME = $(BIN_DIR)/MinhaEstante
 
 SQLITE_C = lib/sqlite3/sqlite3.c
@@ -53,7 +54,7 @@ endif
 SRC_OBJS = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC_FILES))
 
 # identifica que não serão arquivos
-.PHONY: all clean run dirs rebuild
+.PHONY: all clean run dirs build rebuild forget
 
 # Requer o .exe
 all: $(EXE_NAME)
@@ -73,17 +74,18 @@ $(SQLITE_O): $(SQLITE_C) | dirs
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | dirs
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Assegura que os diretórios build/ e bin/ existem
+# Assegura que os diretórios build/ bin/ e data/ existam
 dirs:
-	mkdir -p build bin data
+	mkdir -p $(OBJ_DIR) $(BIN_DIR) $(DB_DIR)
 
-# executa o arquivo executável, se necessário fazendo o 'build' antes
+# executa o arquivo executável
 run: $(EXE_NAME)
 	./$(EXE_NAME)
 
-# Remove o arquivo executável e os arquivos .o
+# Remove os arquivos executáveis em bin/, os arquivos .o em build/ e os bancos de dados em db/
+# rm -r $(BIN_DIR)/* $(OBJ_DIR)/* 
 clean:
-	rm -r $(BIN_DIR)/* $(OBJ_DIR)/*
+	rm $(BIN_DIR)/*.exe $(OBJ_DIR)/*.o $(DB_DIR)/*.db
 
 # Apenas por manter
 build: all
@@ -93,7 +95,7 @@ rebuild: clean all
 
 # remove o banco de dados (.db) e outros arquivos que estão no data/
 forget: 
-	rm -f data/*
+	rm $(DB_DIR)/*.db
 
 # - Compilação foi atualizada, esta compilava tudo toda vez -
 # Compila, primeiro o sqlite3.c para sqlite3.o, depois o executável do projeto. (conferir sintaxe no topo deste arquivo)

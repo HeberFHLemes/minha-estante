@@ -59,14 +59,17 @@ dkms.conf
 
 # Executável
 bin/*
+!bin/.gitkeep
 
 # Banco de dados
 *.db
 data/*
+!data/.gitkeep
 
 # sqlite3.o / outros arquivos .o
 *.o
 build/*
+!build/.gitkeep
 
 # Biblioteca SQLite3 utilizada
 lib/sqlite3/*

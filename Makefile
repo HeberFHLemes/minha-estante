@@ -22,8 +22,24 @@ EXE_NAME = bin/MinhaEstante # Gerado da compilação dos arquivos .c + sqlite3.o
 # Uso dos includes + teste de outras flags
 CFLAGS = $(INCLUDES) -Wall -O2 -g
 
+# SQLite flags (warning na compilação do sqlite3.o -> variável setada mas não usada)
+SQLITE_CFLAGS = $(CFLAGS) -Wno-unused-but-set-variable
+
 # linkers para pthread e dl, pois o SQLite3 utiliza.
-LDFLAGS = -lpthread -ldl
+# LDFLAGS = -lpthread -ldl
+
+# Checar a plataforma que está utilizando
+UNAME_S := $(shell uname -s)
+
+LDFLAGS =
+
+ifeq ($(UNAME_S),Linux)
+    LDFLAGS += -lpthread -ldl
+endif
+
+ifeq ($(OS),Windows_NT)
+    # LDFLAGS += -lsqlite3 (if using prebuilt sqlite3.dll)
+endif
 
 # Opcional: caso utilize sqlite3.dll, por exemplo.
 # T_PARTY_FLAG = -lsqlite3
@@ -37,8 +53,8 @@ build: compile
 
 # Compila, primeiro o sqlite3.c para sqlite3.o, depois o executável do projeto. (conferir sintaxe no topo deste arquivo)
 compile: dirs
-	$(CC) $(LDFLAGS) -o $(SQLITE_O) -c $(SQLITE_C)
-	$(CC) $(CFLAGS) -o $(EXE_NAME) $(SRC_FILES) $(SQLITE_O)
+	$(CC) $(SQLITE_CFLAGS) -o $(SQLITE_O) -c $(SQLITE_C)
+	$(CC) $(CFLAGS) -o $(EXE_NAME) $(SRC_FILES) $(SQLITE_O) $(LDFLAGS)
 
 # Assegura que os diretórios build/ e bin/ existem
 dirs:

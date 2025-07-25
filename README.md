@@ -1,8 +1,8 @@
 # Minha Estante
 
-## Projeto em C para manipulação de bases de dados com SQLite3
+## Projeto em C - Aplicação via console para manipulação de um banco de dados com SQLite3
 
-### Running
+### Instalando
 
 **1. Clone o repositório localmente**
 ```git
@@ -29,5 +29,7 @@ Após construído o executável, também pode ser executado com o comando `./Min
 
 ---
 
-> Este projeto utiliza SQLite3 ([https://sqlite.org/)](https://sqlite.org/)),
+> Este projeto utiliza SQLite3 ([https://sqlite.org/](https://sqlite.org/)),
 > o qual encontra-se em domínio público.
+
+> Todos os arquivos referentes ao SQLite3 neste repositório foram instalados pelo site: [https://sqlite.org/download.html](https://sqlite.org/download.html), sendo parte do arquivo: *sqlite-amalgation-3500300.zip*

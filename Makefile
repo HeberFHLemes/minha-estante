@@ -85,7 +85,7 @@ run: $(EXE_NAME)
 # Remove os arquivos executáveis em bin/, os arquivos .o em build/ e os bancos de dados em db/
 # rm -r $(BIN_DIR)/* $(OBJ_DIR)/* 
 clean:
-	rm $(BIN_DIR)/*.exe $(OBJ_DIR)/*.o $(DB_DIR)/*.db
+	rm $(BIN_DIR)/*.exe $(OBJ_DIR)/*.o
 
 # Apenas por manter
 build: all

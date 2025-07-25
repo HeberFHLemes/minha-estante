@@ -1,18 +1,18 @@
 # Sintaxe - gcc: 
 # --------------
 # gerar sqlite3.o:
-# - gcc -Iinclude -Ithird_party/sqlite3 -Wall -O2 -g -Wno-unused-but-set-variable -c sqlite3.c -o sqlite3.o
+# - gcc -Iinclude -Ilib/sqlite3 -Wall -O2 -g -Wno-unused-but-set-variable -c sqlite3.c -o sqlite3.o
 # (linkagem para pthread e dl feita depois, no caso de não ser executado em ambiente Windows)
 #
 # gerar executável do projeto:
-# - gcc -Iinclude -Ithird_party/sqlite3 -Wall -O2 -g -o MinhaEstante.exe [SRC_OBJS] sqlite3.o [opcional, dependendo de onde executa: -lpthread -ldl]
+# - gcc -Iinclude -Ilib/sqlite3 -Wall -O2 -g -o MinhaEstante.exe [SRC_OBJS] sqlite3.o [opcional, dependendo de onde executa: -lpthread -ldl]
 # (SRC_OBJS: Arquivos como src/exemplo.c transformados em build/exemplo.o)
 
 # Compilador e flags utilizadas 
 CC = gcc
 
-# Includes (include/ e thirdparty/sqlite3/)
-INCLUDES = -Iinclude -Ithird_party/sqlite3
+# Includes (include/ e lib/sqlite3/)
+INCLUDES = -Iinclude -Ilib/sqlite3
 
 # Diretórios e arquivos utilizados
 SRC_DIR = src
@@ -21,7 +21,7 @@ OBJ_DIR = build
 BIN_DIR = bin
 EXE_NAME = $(BIN_DIR)/MinhaEstante
 
-SQLITE_C = third_party/sqlite3/sqlite3.c
+SQLITE_C = lib/sqlite3/sqlite3.c
 
 # Compilado do sqlite3.c
 SQLITE_O = $(OBJ_DIR)/sqlite3.o
@@ -59,12 +59,12 @@ SRC_OBJS = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC_FILES))
 all: $(EXE_NAME)
 
 # .exe: requer os objetos de src/*.c, o .o de sqlite3.c e a existência dos diretórios citados em dirs
-# Compila com: gcc -Iinclude -Ithird_party/sqlite3 -Wall -O2 -g -o MinhaEstante.exe [SRC_OBJS] sqlite3.o [se em Linux: -lpthread -ldl]
+# Compila com: gcc -Iinclude -Ilib/sqlite3 -Wall -O2 -g -o MinhaEstante.exe [SRC_OBJS] sqlite3.o [se em Linux: -lpthread -ldl]
 $(EXE_NAME): $(SRC_OBJS) $(SQLITE_O) | dirs
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 # Compila o sqlite3.c para sqlite3.o
-# Compila com: gcc -Iinclude -Ithird_party/sqlite3 -Wall -O2 -g -Wno-unused-but-set-variable -c sqlite3.c -o sqlite3.o
+# Compila com: gcc -Iinclude -Ilib/sqlite3 -Wall -O2 -g -Wno-unused-but-set-variable -c sqlite3.c -o sqlite3.o
 $(SQLITE_O): $(SQLITE_C) | dirs
 	$(CC) $(SQLITE_CFLAGS) -c $< -o $@
 

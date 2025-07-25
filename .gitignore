@@ -57,8 +57,16 @@ dkms.conf
 # IDE/Editor
 .vscode
 
+# Executável
+bin/*
+
 # Banco de dados
 *.db
+data/*
+
+# sqlite3.o / outros arquivos .o
+*.o
+build/*
 
 # Biblioteca SQLite3 utilizada
 third_party/sqlite3/*

@@ -27,7 +27,7 @@ int desconectar(sqlite3 *db);
 int main(){
 
     mensagem_inicial();
-    
+
     efeito_carregando("Iniciando conexão com o banco de dados");
     
     sqlite3 *db = NULL;

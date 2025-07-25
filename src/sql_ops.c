@@ -5,7 +5,6 @@
 
 // Cria as tabelas (se ainda não existirem) com o arquivo .sql citado
 int criar_tabelas(sqlite3 *db){
-
     char* errMsg = NULL;
     char* sql = ler_sql("sql/tabelas.sql");
     if (!sql) {
@@ -13,10 +12,10 @@ int criar_tabelas(sqlite3 *db){
         return 1;
     }
     int rc = sqlite3_exec(db, sql, NULL, NULL, &errMsg);
-    
+
     if (rc != SQLITE_OK){
-        printf(sql);
-        fprintf(stderr, "Erro SQLite (código %d): %s\n", rc, errMsg ? errMsg : "sem mensagem", errMsg);
+        // printf("%s\n", sql);
+        fprintf(stderr, "Erro SQLite (código %d): %s\n", rc, errMsg ? errMsg : "sem mensagem");
         sqlite3_free(errMsg);
         return 2;
     } 
@@ -28,8 +27,10 @@ int criar_tabelas(sqlite3 *db){
 int executar_stmt(sqlite3 *db, sqlite3_stmt* stmt){
     if (sqlite3_step(stmt) != SQLITE_DONE) {
         fprintf(stderr, "Execução falhou: %s\n", sqlite3_errmsg(db));
+        sqlite3_finalize(stmt);
         return SQLITE_ERROR;
     }
+    sqlite3_finalize(stmt);
     return SQLITE_OK;
 }
 
@@ -47,7 +48,7 @@ int inserir_pessoa(sqlite3 *db, Pessoa* pessoa){
         if (executar_stmt(db, stmt) != SQLITE_OK){
             rc = SQLITE_ERROR;
         }
-        sqlite3_finalize(stmt);  
+        // sqlite3_finalize(stmt);  
     } else {
         fprintf(stderr, "Statement SQL falhou: %s\n", sqlite3_errmsg(db));
         rc = SQLITE_ERROR;
@@ -71,7 +72,7 @@ int inserir_livro(sqlite3 *db, Livro* livro){
         if (executar_stmt(db, stmt) != SQLITE_OK){
             rc = SQLITE_ERROR;
         }
-        sqlite3_finalize(stmt);  
+        //sqlite3_finalize(stmt);  
     } else {
         fprintf(stderr, "Statement SQL falhou: %s\n", sqlite3_errmsg(db));
         rc = SQLITE_ERROR;
@@ -242,7 +243,7 @@ int atualizar_nome(sqlite3 *db, int pessoa_id, char* nome){
         if (executar_stmt(db, stmt) != SQLITE_OK){
             rc = SQLITE_ERROR;
         }
-        sqlite3_finalize(stmt);  
+        //sqlite3_finalize(stmt);  
     } else {
         fprintf(stderr, "Statement SQL falhou: %s\n", sqlite3_errmsg(db));
         rc = SQLITE_ERROR;
@@ -264,7 +265,7 @@ int atualizar_telefone(sqlite3 *db, int pessoa_id, char* telefone){
         if (executar_stmt(db, stmt) != SQLITE_OK){
             rc = SQLITE_ERROR;
         }
-        sqlite3_finalize(stmt);  
+        //sqlite3_finalize(stmt);  
     } else {
         fprintf(stderr, "Statement SQL falhou: %s\n", sqlite3_errmsg(db));
         rc = SQLITE_ERROR;
@@ -286,7 +287,7 @@ int atualizar_titulo(sqlite3 *db, int livro_id, char* titulo){
         if (executar_stmt(db, stmt) != SQLITE_OK){
             rc = SQLITE_ERROR;
         }
-        sqlite3_finalize(stmt);  
+        //sqlite3_finalize(stmt);  
     } else {
         fprintf(stderr, "Statement SQL falhou: %s\n", sqlite3_errmsg(db));
         rc = SQLITE_ERROR;
@@ -308,7 +309,7 @@ int remover_livro(sqlite3 *db, int livro_id){
         if (executar_stmt(db, stmt) != SQLITE_OK){
             rc = SQLITE_ERROR;
         }
-        sqlite3_finalize(stmt);  
+        //sqlite3_finalize(stmt);  
     } else {
         fprintf(stderr, "Statement SQL falhou: %s\n", sqlite3_errmsg(db));
         rc = SQLITE_ERROR;
@@ -329,7 +330,7 @@ int remover_pessoa(sqlite3 *db, int pessoa_id){
         if (executar_stmt(db, stmt) != SQLITE_OK){
             rc = SQLITE_ERROR;
         }
-        sqlite3_finalize(stmt);  
+        //sqlite3_finalize(stmt);  
     } else {
         fprintf(stderr, "Statement SQL falhou: %s\n", sqlite3_errmsg(db));
         rc = SQLITE_ERROR;

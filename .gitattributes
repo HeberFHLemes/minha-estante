@@ -1,1 +1,1 @@
-lib/sqlite3/* linguist-vendored
+lib/** linguist-vendored
